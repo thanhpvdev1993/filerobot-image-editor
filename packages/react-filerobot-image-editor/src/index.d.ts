@@ -1,39 +1,39 @@
-import { FunctionComponent, RefObject } from 'react';
+import { FunctionComponent, RefObject } from "react";
 
 declare const TABS = {
-  FINETUNE: 'Finetune',
-  FILTERS: 'Filters',
-  ADJUST: 'Adjust',
-  WATERMARK: 'Watermark',
-  ANNOTATE: 'Annotate',
-  RESIZE: 'Resize',
+  FINETUNE: "Finetune",
+  FILTERS: "Filters",
+  ADJUST: "Adjust",
+  WATERMARK: "Watermark",
+  ANNOTATE: "Annotate",
+  RESIZE: "Resize",
 } as const;
 
 declare const TOOLS = {
-  CROP: 'Crop',
-  ROTATE: 'Rotate',
-  FLIP_X: 'Flip_X',
-  FLIP_Y: 'Flip_Y',
-  BRIGHTNESS: 'Brightness',
-  CONTRAST: 'Contrast',
-  HSV: 'HueSaturationValue',
-  WARMTH: 'Warmth',
-  BLUR: 'Blur',
-  THRESHOLD: 'Threshold',
-  POSTERIZE: 'Posterize',
-  PIXELATE: 'Pixelate',
-  NOISE: 'Noise',
-  FILTERS: 'Filters',
-  RECT: 'Rect',
-  ELLIPSE: 'Ellipse',
-  POLYGON: 'Polygon',
-  TEXT: 'Text',
-  LINE: 'Line',
-  IMAGE: 'Image',
-  ARROW: 'Arrow',
-  WATERMARK: 'Watermark',
-  PEN: 'Pen',
-  RESIZE: 'Resize',
+  CROP: "Crop",
+  ROTATE: "Rotate",
+  FLIP_X: "Flip_X",
+  FLIP_Y: "Flip_Y",
+  BRIGHTNESS: "Brightness",
+  CONTRAST: "Contrast",
+  HSV: "HueSaturationValue",
+  WARMTH: "Warmth",
+  BLUR: "Blur",
+  THRESHOLD: "Threshold",
+  POSTERIZE: "Posterize",
+  PIXELATE: "Pixelate",
+  NOISE: "Noise",
+  FILTERS: "Filters",
+  RECT: "Rect",
+  ELLIPSE: "Ellipse",
+  POLYGON: "Polygon",
+  TEXT: "Text",
+  LINE: "Line",
+  IMAGE: "Image",
+  ARROW: "Arrow",
+  WATERMARK: "Watermark",
+  PEN: "Pen",
+  RESIZE: "Resize",
 } as const;
 
 // TABS_IDS
@@ -42,13 +42,13 @@ type availableTabs = typeof TABS[keyof typeof TABS];
 // TOOLS_IDS
 type availableTools = typeof TOOLS[keyof typeof TOOLS];
 
-type lineCap = 'butt' | 'round' | 'square';
+type lineCap = "butt" | "round" | "square";
 
 // CLOSING_REASONS
 type closingReasons =
-  | 'after-saving'
-  | 'close-button-clicked'
-  | 'back-button-clicked'
+  | "after-saving"
+  | "close-button-clicked"
+  | "back-button-clicked"
   | string;
 
 type savedImageData = {
@@ -82,8 +82,8 @@ type textAnnotation = annotationsCommon & {
   fontSize?: number;
   letterSpacing?: number;
   lineHeight?: number;
-  align?: 'left' | 'center' | 'right';
-  fontStyle?: 'normal' | 'bold' | 'italic' | 'bold italic';
+  align?: "left" | "center" | "right";
+  fontStyle?: "normal" | "bold" | "italic" | "bold italic";
 };
 
 type rectAnnotation = annotationsCommon & {
@@ -111,7 +111,7 @@ type arrowAnnotation = annotationsCommon & {
 
 type rotateAnnotation = {
   angle?: number;
-  componentType?: 'slider' | 'buttons';
+  componentType?: "slider" | "buttons";
 };
 
 type cropPresetItem = {
@@ -202,7 +202,7 @@ type imageDesignState = {
 
 type onSaveFunction = (
   savedImageData: savedImageData,
-  imageDesignState: imageDesignState,
+  imageDesignState: imageDesignState
 ) => void | Promise;
 
 export type getCurrentImgDataFunction = (
@@ -213,7 +213,7 @@ export type getCurrentImgDataFunction = (
     size?: { width?: number; height?: number };
   },
   pixelRatio?: boolean | number,
-  keepLoadingSpinnerShown?: boolean,
+  keepLoadingSpinnerShown?: boolean
 ) => {
   imageData: savedImageData;
   designState: imageDesignState;
@@ -237,11 +237,13 @@ export interface FilerobotImageEditorConfig {
     fonts?: (string | { label: string; value: string })[];
     onFontChange?: (
       newFontFamily: string,
-      reRenderCanvasFn: () => void,
+      reRenderCanvasFn: () => void
     ) => void;
   };
   // [TOOLS_IDS.IMAGE]
-  Image?: annotationsCommon;
+  Image?: annotationsCommon & {
+    gallery?: string[] | [];
+  };
   // [TOOLS_IDS.ELLIPSE]
   Ellipse?: annotationsCommon;
   // [TOOLS_IDS.RECT]
@@ -266,7 +268,7 @@ export interface FilerobotImageEditorConfig {
     minHeight?: number;
     maxWidth?: null;
     maxHeight?: null;
-    ratio?: 'original' | 'custom' | 'ellipse' | number;
+    ratio?: "original" | "custom" | "ellipse" | number;
     noPresets?: boolean;
     ratioTitleKey?: string;
     presetsItems?: cropPresetItem[];
@@ -282,20 +284,20 @@ export interface FilerobotImageEditorConfig {
   onClose?: (closeReason: closingReasons, haveNotSavedChanges: boolean) => void;
   closeAfterSave?: boolean;
   defaultSavedImageName?: string;
-  defaultSavedImageType?: 'png' | 'jpeg' | 'jpg' | 'webp';
+  defaultSavedImageType?: "png" | "jpeg" | "jpg" | "webp";
   forceToPngInEllipticalCrop?: boolean;
   useBackendTranslations?: boolean;
   translations?: object;
   language?:
-    | 'en'
-    | 'fr'
-    | 'de'
-    | 'it'
-    | 'pt'
-    | 'es'
-    | 'nl'
-    | 'pl'
-    | 'ro'
+    | "en"
+    | "fr"
+    | "de"
+    | "it"
+    | "pt"
+    | "es"
+    | "nl"
+    | "pl"
+    | "ro"
     | string;
   avoidChangesNotSavedAlertOnLeave?: boolean;
   loadableDesignState?: imageDesignState;

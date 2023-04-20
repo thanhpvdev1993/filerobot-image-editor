@@ -38,6 +38,7 @@ export default {
     onFontChange: undefined,
   },
   [TOOLS_IDS.IMAGE]: {
+    gallery: [],
     fill: undefined,
   },
   [TOOLS_IDS.RECT]: {

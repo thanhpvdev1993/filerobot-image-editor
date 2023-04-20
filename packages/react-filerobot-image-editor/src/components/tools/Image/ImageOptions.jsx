@@ -3,11 +3,13 @@ import React, { useRef, useState } from 'react';
 import Button from '@scaleflex/ui/core/button';
 
 /** Internal Dependencies */
-import { useAnnotation, useStore } from 'hooks';
+import { useAnnotation, usePhoneScreen, useStore } from 'hooks';
 import { FEEDBACK_STATUSES, TOOLS_IDS } from 'utils/constants';
 import { SET_FEEDBACK } from 'actions';
 import HiddenUploadInput from 'components/common/HiddenUploadInput';
 import ImageControls from './ImageControls';
+import ImageGallery from './ImageGallery';
+import { StyledImageOptionWrapper, StyledImageWrapper } from './Image.styled';
 
 const ADDED_IMG_SPACING_PERCENT = 0.15;
 
@@ -27,6 +29,8 @@ const ImageOptions = () => {
     },
     false,
   );
+
+  const isPhoneScreen = usePhoneScreen();
 
   const requestedImgsCount = useRef(0);
 
@@ -119,24 +123,31 @@ const ImageOptions = () => {
   };
 
   return (
-    <ImageControls image={image} saveImage={saveImage} t={t}>
-      <Button
-        className="FIE_image-tool-add-option"
-        color="secondary"
-        onClick={isLoading ? undefined : triggerUploadInput}
-        disabled={isLoading}
-        size="sm"
-        style={{ maxHeight: 24 }}
-      >
-        {isLoading ? t('importing') : t('addImage')}
-      </Button>
-      <HiddenUploadInput
-        ref={uploadImgsInput}
-        onChange={isLoading ? undefined : importImages}
-        disabled={isLoading}
-        multiple
-      />
-    </ImageControls>
+    <StyledImageOptionWrapper>
+      <ImageControls image={image} saveImage={saveImage} t={t} />
+      <StyledImageWrapper className="FIE_image-add-wrapper">
+        <Button
+          className="FIE_image-tool-add-option"
+          color="secondary"
+          onClick={isLoading ? undefined : triggerUploadInput}
+          disabled={isLoading}
+          size="sm"
+          style={{ maxHeight: 24 }}
+        >
+          {isLoading ? t('importing') : t('addImage')}
+        </Button>
+        <ImageGallery
+          selectImage={addImgScaled}
+          style={isPhoneScreen ? { width: '55%' } : undefined}
+        />
+        <HiddenUploadInput
+          ref={uploadImgsInput}
+          onChange={isLoading ? undefined : importImages}
+          disabled={isLoading}
+          multiple
+        />
+      </StyledImageWrapper>
+    </StyledImageOptionWrapper>
   );
 };
 
