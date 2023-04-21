@@ -11,13 +11,12 @@ import ImageControls from './ImageControls';
 import ImageGallery from './ImageGallery';
 import { StyledImageOptionWrapper, StyledImageWrapper } from './Image.styled';
 
-const ADDED_IMG_SPACING_PERCENT = 0.15;
-
 const ImageOptions = () => {
   const [isLoading, setIsLoading] = useState();
   const uploadImgsInput = useRef();
   const {
     shownImageDimensions,
+    config,
     dispatch,
     adjustments: { crop = {} },
     t,
@@ -32,28 +31,36 @@ const ImageOptions = () => {
 
   const isPhoneScreen = usePhoneScreen();
 
+  const layerWidth = crop.width || shownImageDimensions.width;
+  const layerHeight = crop.height || shownImageDimensions.height;
+
+  const layerCropX = crop.x || 0;
+  const layerCropY = crop.y || 0;
+
   const requestedImgsCount = useRef(0);
 
-  const addImgScaled = (loadedImg) => {
-    const layerWidth = crop.width || shownImageDimensions.width;
-    const layerHeight = crop.height || shownImageDimensions.height;
-    const layerCropX = crop.x || 0;
-    const layerCropY = crop.y || 0;
+  const imageConfig = config[TOOLS_IDS.IMAGE];
+  const imageScalingRatio = imageConfig.imageScalingRatio || 0.15;
 
-    const newImgRatio = Math.min(
-      1,
-      layerWidth /
-        (loadedImg.width + loadedImg.width * ADDED_IMG_SPACING_PERCENT),
-      layerHeight /
-        (loadedImg.height + loadedImg.height * ADDED_IMG_SPACING_PERCENT),
-    );
+  const addImgScaled = (loadedImg) => {
+    const imgRatio = loadedImg.width / loadedImg.height;
+    const newImgDimensions = {};
+    if (layerHeight > layerWidth) {
+      const newImgScale = (layerHeight * imageScalingRatio) / loadedImg.height;
+      newImgDimensions.height = loadedImg.height * newImgScale;
+      newImgDimensions.width = newImgDimensions.height * imgRatio;
+    } else {
+      const newImgScale = (layerWidth * imageScalingRatio) / loadedImg.width;
+      newImgDimensions.width = loadedImg.width * newImgScale;
+      newImgDimensions.height = newImgDimensions.width / imgRatio;
+    }
 
     addNewImage({
+      ...newImgDimensions,
+      padding: 1,
       image: loadedImg,
-      x: layerCropX + layerWidth / 2 - (loadedImg.width * newImgRatio) / 2,
-      y: layerCropY + layerHeight / 2 - (loadedImg.height * newImgRatio) / 2,
-      width: loadedImg.width * newImgRatio,
-      height: loadedImg.height * newImgRatio,
+      x: layerCropX + layerWidth / 2 - newImgDimensions.width / 2,
+      y: layerCropY + layerHeight / 2 - newImgDimensions.height / 2,
     });
   };
 
